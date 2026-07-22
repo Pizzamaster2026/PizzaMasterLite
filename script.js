@@ -8,28 +8,53 @@ const waterOut = document.getElementById("water");
 const saltOut = document.getElementById("saltResult");
 const totalOut = document.getElementById("total");
 
-// Referenzrezept
+// ======================
+// REFERENZREZEPT
+// ======================
+
+const BASE_PIZZAS = 4;
+const BASE_WEIGHT = 280;
+
 const BASE_FLOUR = 668;
 const BASE_WATER = 436;
 const BASE_SALT = 20;
 const BASE_YEAST = 2;
-const BASE_TOTAL = BASE_FLOUR + BASE_WATER + BASE_SALT + BASE_YEAST;
+
+const BASE_TOTAL =
+    BASE_FLOUR +
+    BASE_WATER +
+    BASE_SALT +
+    BASE_YEAST;
+
+// Differenz zwischen 4x280g und dem Referenzteig
+const OFFSET = BASE_TOTAL - (BASE_PIZZAS * BASE_WEIGHT);
+
+// ======================
 
 function calculate() {
 
-    const totalWeight =
+    const enteredTotal =
         Number(pizzas.value) *
         Number(weight.value);
 
-    const factor = totalWeight / BASE_TOTAL;
+    // intern mit Referenzgewicht rechnen
+    const calculationWeight =
+        enteredTotal + OFFSET;
 
-    let flour = BASE_FLOUR * factor;
+    const factor =
+        calculationWeight / BASE_TOTAL;
 
-    // Hydration anpassen
-    let water = flour * (Number(hydration.value) / 100);
+    // Mehl aus Referenz
+    const flour =
+        BASE_FLOUR * factor;
 
-    // Salz anpassen
-    let saltGram = flour * (Number(salt.value) / 100);
+    // Wasser nach gewünschter Hydration
+    const water =
+        flour * (Number(hydration.value) / 100);
+
+    // Salz nach gewünschtem %
+    const saltGram =
+        flour * (Number(salt.value) / 100);
 
     flourOut.textContent =
         flour.toFixed(1) + " g";
@@ -40,12 +65,13 @@ function calculate() {
     saltOut.textContent =
         saltGram.toFixed(1) + " g";
 
+    // Benutzer soll sein eingegebenes Gewicht sehen
     totalOut.textContent =
-        totalWeight.toFixed(1) + " g";
+        enteredTotal.toFixed(1) + " g";
 }
 
 calculate();
 
-[pizzas, weight, hydration, salt].forEach(el=>{
-    el.addEventListener("input", calculate);
+[pizzas, weight, hydration, salt].forEach(input => {
+    input.addEventListener("input", calculate);
 });
