@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html lang="de">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>PizzaMasterLite</title>
 
 <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
@@ -17,15 +13,53 @@
 <div class="container">
 
 <h1>🍕 PizzaMasterLite</h1>
+<p class="subtitle">Der einfache Pizzateig-Rechner</p>
 
-<p class="subtitle">
-Pizzateig-Rechner
-</p>
+<div class="card">
+
+<label>Anzahl Pizzen</label>
+<input type="number" id="pizzas" value="2">
+
+<label>Teiggewicht pro Pizza (g)</label>
+<input type="number" id="weight" value="280">
+
+<label>Hydration (%)</label>
+<input type="number" id="hydration" value="65">
+
+<label>Salz (%)</label>
+<input type="number" id="salt" value="3">
+
+<label>Hefe</label>
+<select id="yeastType">
+<option>Frischhefe</option>
+<option>Trockenhefe</option>
+</select>
+
+<label>Gare (Stunden)</label>
+<input type="number" id="hours" value="24">
+
+<label>Raumtemperatur (°C)</label>
+<input type="number" id="temp" value="20">
+
+<button id="calculate">Berechnen</button>
+
+</div>
+
+<div class="card">
+
+<h2>Ergebnis</h2>
+
+<p>Mehl: <span id="flour">0 g</span></p>
+<p>Wasser: <span id="water">0 g</span></p>
+<p>Salz: <span id="saltResult">0 g</span></p>
+<p>Hefe: <span id="yeast">0 g</span></p>
+<p><strong>Gesamt: <span id="total">0 g</span></strong></p>
+
+</div>
 
 </div>
 
 <script src="script.js"></script>
 
 </body>
-
 </html>
