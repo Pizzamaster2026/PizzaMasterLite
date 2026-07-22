@@ -1,4 +1,6 @@
 const recipe = document.getElementById("recipe");
+const recipeName = document.getElementById("recipeName");
+const saveRecipe = document.getElementById("saveRecipe");
 
 const pizzas = document.getElementById("pizzas");
 const weight = document.getElementById("weight");
@@ -14,7 +16,6 @@ const saltOut = document.getElementById("saltResult");
 const yeastOut = document.getElementById("yeast");
 const totalOut = document.getElementById("total");
 
-// Referenzrezept
 const BASE_PIZZAS = 4;
 const BASE_WEIGHT = 280;
 const BASE_FLOUR = 668;
@@ -26,44 +27,33 @@ const BASE_TOTAL = 1126;
 const OFFSET = BASE_TOTAL - (BASE_PIZZAS * BASE_WEIGHT);
 
 function loadStandardRecipe() {
-    pizzas.value = BASE_PIZZAS;
-    weight.value = BASE_WEIGHT;
+    pizzas.value = 4;
+    weight.value = 280;
     hydration.value = 65;
     salt.value = 3;
     yeastType.value = "fresh";
     hours.value = 24;
     temperature.value = 20;
-
     calculate();
 }
 
 function calculate() {
 
-    const enteredTotal =
-        Number(pizzas.value) *
-        Number(weight.value);
-
-    const calculationTotal =
-        enteredTotal + OFFSET;
-
-    const factor =
-        calculationTotal / BASE_TOTAL;
+    const enteredTotal = Number(pizzas.value) * Number(weight.value);
+    const calculationTotal = enteredTotal + OFFSET;
+    const factor = calculationTotal / BASE_TOTAL;
 
     const flour = BASE_FLOUR * factor;
 
-    let water;
-    if (Number(hydration.value) === 65) {
-        water = BASE_WATER * factor;
-    } else {
-        water = flour * (Number(hydration.value) / 100);
-    }
+    const water =
+        Number(hydration.value) === 65
+            ? BASE_WATER * factor
+            : flour * Number(hydration.value) / 100;
 
-    let saltGram;
-    if (Number(salt.value) === 3) {
-        saltGram = BASE_SALT * factor;
-    } else {
-        saltGram = flour * (Number(salt.value) / 100);
-    }
+    const saltGram =
+        Number(salt.value) === 3
+            ? BASE_SALT * factor
+            : flour * Number(salt.value) / 100;
 
     let yeast = BASE_YEAST * factor;
 
@@ -81,16 +71,96 @@ function calculate() {
     totalOut.textContent = Math.round(enteredTotal) + " g";
 }
 
-function recipeChanged() {
-    if (recipe.value === "standard") {
-        loadStandardRecipe();
-    } else {
-        calculate();
+function loadRecipes() {
+
+    while (recipe.options.length > 2) {
+        recipe.remove(2);
     }
+
+    const recipes =
+        JSON.parse(localStorage.getItem("pizzaRecipes")) || [];
+
+    recipes.forEach(r => {
+
+        const option = document.createElement("option");
+        option.value = r.name;
+        option.textContent = "🍕 " + r.name;
+
+        recipe.appendChild(option);
+
+    });
+
 }
 
-recipe.addEventListener("change", recipeChanged);
-recipe.addEventListener("input", recipeChanged);
+saveRecipe.addEventListener("click", () => {
+
+    if (recipeName.value.trim() === "") {
+        alert("Bitte einen Rezeptnamen eingeben.");
+        return;
+    }
+
+    const recipes =
+        JSON.parse(localStorage.getItem("pizzaRecipes")) || [];
+
+    recipes.push({
+
+        name: recipeName.value,
+
+        pizzas: pizzas.value,
+        weight: weight.value,
+        hydration: hydration.value,
+        salt: salt.value,
+        yeastType: yeastType.value,
+        hours: hours.value,
+        temperature: temperature.value
+
+    });
+
+    localStorage.setItem(
+        "pizzaRecipes",
+        JSON.stringify(recipes)
+    );
+
+    loadRecipes();
+
+    recipe.value = recipeName.value;
+
+    alert("Rezept gespeichert.");
+
+});
+
+recipe.addEventListener("change", () => {
+
+    if (recipe.value === "standard") {
+
+        loadStandardRecipe();
+        return;
+
+    }
+
+    if (recipe.value === "custom") {
+        return;
+    }
+
+    const recipes =
+        JSON.parse(localStorage.getItem("pizzaRecipes")) || [];
+
+    const r =
+        recipes.find(x => x.name === recipe.value);
+
+    if (!r) return;
+
+    pizzas.value = r.pizzas;
+    weight.value = r.weight;
+    hydration.value = r.hydration;
+    salt.value = r.salt;
+    yeastType.value = r.yeastType;
+    hours.value = r.hours;
+    temperature.value = r.temperature;
+
+    calculate();
+
+});
 
 [
     pizzas,
@@ -100,10 +170,12 @@ recipe.addEventListener("input", recipeChanged);
     yeastType,
     hours,
     temperature
-].forEach(input => {
-    input.addEventListener("input", calculate);
-    input.addEventListener("change", calculate);
+].forEach(i => {
+
+    i.addEventListener("input", calculate);
+    i.addEventListener("change", calculate);
+
 });
 
-// Standardrezept beim Start laden
+loadRecipes();
 loadStandardRecipe();
