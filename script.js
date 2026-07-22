@@ -26,8 +26,8 @@ const BASE_TOTAL = 1126;
 const OFFSET = BASE_TOTAL - (BASE_PIZZAS * BASE_WEIGHT);
 
 function loadStandardRecipe() {
-    pizzas.value = 4;
-    weight.value = 280;
+    pizzas.value = BASE_PIZZAS;
+    weight.value = BASE_WEIGHT;
     hydration.value = 65;
     salt.value = 3;
     yeastType.value = "fresh";
@@ -81,11 +81,16 @@ function calculate() {
     totalOut.textContent = Math.round(enteredTotal) + " g";
 }
 
-recipe.addEventListener("change", () => {
+function recipeChanged() {
     if (recipe.value === "standard") {
         loadStandardRecipe();
+    } else {
+        calculate();
     }
-});
+}
+
+recipe.addEventListener("change", recipeChanged);
+recipe.addEventListener("input", recipeChanged);
 
 [
     pizzas,
@@ -97,6 +102,8 @@ recipe.addEventListener("change", () => {
     temperature
 ].forEach(input => {
     input.addEventListener("input", calculate);
+    input.addEventListener("change", calculate);
 });
 
-calculate();
+// Standardrezept beim Start laden
+loadStandardRecipe();
