@@ -1,61 +1,47 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PizzaMasterLite</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PizzaMasterLite</title>
 
-<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <div class="container">
 
-<h1>🍕 PizzaMasterLite</h1>
-<p class="subtitle">Der einfache Pizzateig-Rechner</p>
+    <h1>🍕 PizzaMasterLite</h1>
+    <p class="subtitle">Einfacher Pizzateig-Rechner</p>
 
-<div class="card">
+    <div class="card">
 
-<label>Anzahl Pizzen</label>
-<input type="number" id="pizzas" value="2">
+        <label for="pizzas">Anzahl Pizzen</label>
+        <input type="number" id="pizzas" value="2" min="1">
 
-<label>Teiggewicht pro Pizza (g)</label>
-<input type="number" id="weight" value="280">
+        <label for="weight">Gewicht pro Pizza (g)</label>
+        <input type="number" id="weight" value="280" min="100">
 
-<label>Hydration (%)</label>
-<input type="number" id="hydration" value="65">
+        <label for="hydration">Hydration (%)</label>
+        <input type="number" id="hydration" value="65" min="40" max="90">
 
-<label>Salz (%)</label>
-<input type="number" id="salt" value="3">
+        <label for="salt">Salz (%)</label>
+        <input type="number" id="salt" value="3" step="0.1">
 
-<label>Hefe</label>
-<select id="yeastType">
-<option>Frischhefe</option>
-<option>Trockenhefe</option>
-</select>
+    </div>
 
-<label>Gare (Stunden)</label>
-<input type="number" id="hours" value="24">
+    <div class="card">
 
-<label>Raumtemperatur (°C)</label>
-<input type="number" id="temp" value="20">
+        <h2>Ergebnis</h2>
 
-<button id="calculate">Berechnen</button>
+        <p>🌾 Mehl: <span id="flour">0 g</span></p>
+        <p>💧 Wasser: <span id="water">0 g</span></p>
+        <p>🧂 Salz: <span id="saltResult">0 g</span></p>
+        <hr>
+        <p><strong>⚖️ Gesamtteig: <span id="total">0 g</span></strong></p>
 
-</div>
-
-<div class="card">
-
-<h2>Ergebnis</h2>
-
-<p>Mehl: <span id="flour">0 g</span></p>
-<p>Wasser: <span id="water">0 g</span></p>
-<p>Salz: <span id="saltResult">0 g</span></p>
-<p>Hefe: <span id="yeast">0 g</span></p>
-<p><strong>Gesamt: <span id="total">0 g</span></strong></p>
-
-</div>
+    </div>
 
 </div>
 
