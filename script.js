@@ -8,24 +8,44 @@ const waterOut = document.getElementById("water");
 const saltOut = document.getElementById("saltResult");
 const totalOut = document.getElementById("total");
 
+// Referenzrezept
+const BASE_FLOUR = 668;
+const BASE_WATER = 436;
+const BASE_SALT = 20;
+const BASE_YEAST = 2;
+const BASE_TOTAL = BASE_FLOUR + BASE_WATER + BASE_SALT + BASE_YEAST;
+
 function calculate() {
 
-    const total = Number(pizzas.value) * Number(weight.value);
-    const hyd = Number(hydration.value) / 100;
-    const saltPct = Number(salt.value) / 100;
+    const totalWeight =
+        Number(pizzas.value) *
+        Number(weight.value);
 
-    const flour = total / (1 + hyd + saltPct);
-    const water = flour * hyd;
-    const saltGr = flour * saltPct;
+    const factor = totalWeight / BASE_TOTAL;
 
-    flourOut.textContent = flour.toFixed(1) + " g";
-    waterOut.textContent = water.toFixed(1) + " g";
-    saltOut.textContent = saltGr.toFixed(1) + " g";
-    totalOut.textContent = total.toFixed(1) + " g";
+    let flour = BASE_FLOUR * factor;
+
+    // Hydration anpassen
+    let water = flour * (Number(hydration.value) / 100);
+
+    // Salz anpassen
+    let saltGram = flour * (Number(salt.value) / 100);
+
+    flourOut.textContent =
+        flour.toFixed(1) + " g";
+
+    waterOut.textContent =
+        water.toFixed(1) + " g";
+
+    saltOut.textContent =
+        saltGram.toFixed(1) + " g";
+
+    totalOut.textContent =
+        totalWeight.toFixed(1) + " g";
 }
 
 calculate();
 
-[pizzas, weight, hydration, salt].forEach(input => {
-    input.addEventListener("input", calculate);
+[pizzas, weight, hydration, salt].forEach(el=>{
+    el.addEventListener("input", calculate);
 });
